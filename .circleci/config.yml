@@ -63,12 +63,7 @@ jobs:
           command: |
             cd frontend
             npm install
-            npm run build
-      - slack/notify:
-          branch_pattern: .+
-          event: fail
-          channel: $SLACK_DEFAULT_CHANNEL
-          template: basic_fail_1
+            npm run build      
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build-1
