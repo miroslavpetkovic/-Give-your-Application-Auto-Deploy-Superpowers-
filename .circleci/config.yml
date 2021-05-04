@@ -85,9 +85,7 @@ jobs:
             cd frontend
             npm install 
             npm run build
-      - slack/status:
-          fail_only: true
-
+      
   build-backend:
     docker:
         - image: circleci/node:13.8.0
@@ -99,8 +97,7 @@ jobs:
             cd backend
             npm install 
             npm run build
-      - slack/status:
-          fail_only: true
+     
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -116,9 +113,7 @@ jobs:
             JEST_JUNIT_OUTPUT_DIR: /tmp/reports/junit/
       - store_test_results:
           path: /tmp/reports/junit/
-      - slack/status:
-          fail_only: true
-
+   
   test-backend:
     docker:
         - image: circleci/node:13.8.0
@@ -134,8 +129,7 @@ jobs:
             JEST_JUNIT_OUTPUT_DIR: /tmp/reports/junit/
       - store_test_results:
           path: /tmp/reports/junit/
-      - slack/status:
-          fail_only: true
+
 
   scan-frontend:
     docker:
@@ -148,8 +142,6 @@ jobs:
             cd frontend
             npm install
             npm audit --audit-level=critical
-      - slack/status:
-          fail_only: true
 
   scan-backend:
     docker:
@@ -162,8 +154,6 @@ jobs:
             cd backend
             npm install
             npm audit --audit-level=critical
-      - slack/status:
-          fail_only: true
 
   deploy-infrastructure:
     docker:
@@ -207,8 +197,6 @@ jobs:
             --stack-name cloud-devops-frontend-${CIRCLE_WORKFLOW_ID:0:7} \
             --parameters ParameterKey=ID,ParameterValue=${CIRCLE_WORKFLOW_ID:0:7}
       - destroy-environment
-      - slack/status:
-          fail_only: true
 
   configure-infrastructure:
     executor: python/default
@@ -230,8 +218,6 @@ jobs:
             ansible -u ubuntu -m ping backend -e 'ansible_python_interpreter=/usr/bin/python3'
             ansible-playbook server-configuration.yaml -e 'ansible_python_interpreter=/usr/bin/python3'
       - destroy-environment
-      - slack/status:
-          fail_only: true
 
   run-migrations:
     docker:
@@ -249,8 +235,6 @@ jobs:
               --request PUT \
               --data $( grep -c "No migrations are pending" migrations.log ) \
               https://api.memstash.io/values/no_migrations_pending_<< pipeline.id >>
-      - slack/status:
-          fail_only: true
 
   deploy-frontend:
     docker:
@@ -284,8 +268,6 @@ jobs:
             aws s3 cp ./frontend/dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --recursive
       - revert-migration
       - destroy-environment
-      - slack/status:
-          fail_only: true
 
   deploy-backend:
     executor: python/default
@@ -313,8 +295,6 @@ jobs:
             ansible-playbook deploy-backend.yaml -e 'ansible_python_interpreter=/usr/bin/python3'
       - revert-migration
       - destroy-environment
-      - slack/status:
-          fail_only: true
 
   smoke-test:
     docker:
@@ -351,8 +331,6 @@ jobs:
             fi
       - revert-migration
       - destroy-environment
-      - slack/status:
-          fail_only: true
 
   cloudfront-update:
     docker:
@@ -387,8 +365,7 @@ jobs:
               aws cloudformation delete-stack --stack-name cloud-devops-backend-${OLD_WORKFLOW_ID}
             fi
       - destroy-environment
-      - slack/status:
-          fail_only: true
+
 
 workflows:
   udapeople:
