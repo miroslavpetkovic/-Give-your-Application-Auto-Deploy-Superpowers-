@@ -86,11 +86,6 @@ jobs:
             cd backend
             npm install
             npm run build
-      - slack/notify:
-          branch_pattern: .+
-          event: fail
-          channel: $SLACK_DEFAULT_CHANNEL
-          template: basic_fail_1
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
@@ -116,11 +111,7 @@ jobs:
           command: |
             cd frontend
             npm run test
-      - slack/notify:
-          branch_pattern: .+
-          event: fail
-          channel: $SLACK_DEFAULT_CHANNEL
-          template: basic_fail_1
+      
                 
   test-backend:
     docker:
@@ -138,11 +129,6 @@ jobs:
           command: |
             cd backend
             npm run test
-      - slack/notify:
-          branch_pattern: .+
-          event: fail
-          channel: $SLACK_DEFAULT_CHANNEL
-          template: basic_fail_1
                      
   scan-frontend:
     docker:
@@ -160,11 +146,6 @@ jobs:
           command: |
             cd frontend
             npm audit --audit-level=critical
-      - slack/notify:
-          branch_pattern: .+
-          event: fail
-          channel: $SLACK_DEFAULT_CHANNEL
-          template: basic_fail_1
 
   scan-backend:
     docker:
@@ -182,12 +163,7 @@ jobs:
           command: |
             cd backend
             npm audit --audit-level=critical
-      - slack/notify:
-          branch_pattern: .+
-          event: fail
-          channel: $SLACK_DEFAULT_CHANNEL
-          template: basic_fail_1
-
+   
   deploy-infrastructure:
     docker:
       # Docker image here that supports AWS CLI
