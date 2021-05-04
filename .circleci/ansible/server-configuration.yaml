@@ -1,0 +1,10 @@
+--- 
+
+- name: Configure Backend Server
+  hosts: backend
+  user: ubuntu
+  become: yes
+  
+  roles:
+    - configure-server
+    - configure-prometheus-node-exporter
