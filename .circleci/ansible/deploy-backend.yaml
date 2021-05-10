@@ -1,8 +1,0 @@
---- 
-
-- name: Deploy content to Backend Server
-  hosts: backend
-  user: ubuntu
-  
-  roles:
-    - deploy
