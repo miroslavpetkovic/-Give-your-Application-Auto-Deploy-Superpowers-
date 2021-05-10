@@ -434,7 +434,7 @@ workflows:
       - deploy-frontend:
           requires: [deploy-infrastructure]
       - deploy-backend:
-          requires: [run-migrations]
+          requires: [deploy-frontend]
       - smoke-test:
           requires: [deploy-frontend]
       - cloudfront-update:
